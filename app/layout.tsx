@@ -1,9 +1,10 @@
 import { DraftAlert } from "@/components/misc/DraftAlert"
-import { HeaderNav } from "@/components/navigation/HeaderNav"
 import type { Metadata } from "next"
 import type { ReactNode } from "react"
 
 import "@/styles/globals.css"
+import Navbar from "@/components/layout/Navbar"
+import Footer from "@/components/layout/Footer"
 
 export const metadata: Metadata = {
   title: {
@@ -25,11 +26,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className="min-h-screen flex flex-col">
         <DraftAlert />
-        <div className="max-w-screen-md px-6 mx-auto">
-          <HeaderNav />
-          <main className="container py-10 mx-auto">{children}</main>
+        <div className="flex-1">
+          <Navbar />
+          <main >{children}</main>
+          <Footer />
         </div>
       </body>
     </html>
