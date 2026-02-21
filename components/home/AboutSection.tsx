@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function AboutSection() {
   return (
@@ -65,9 +66,18 @@ export default function AboutSection() {
               </span>
             </div>
           </div>
-          <button className="px-8 py-3 bg-white dark:bg-zinc-800 text-black dark:text-white font-bold uppercase tracking-widest border-2 border-primary rounded-lg hover:bg-primary hover:text-white transition-all">
+          
+          <Link
+            href="/about"
+            className="px-8 py-3 
+            text-black dark:text-white 
+            font-bold uppercase tracking-widest 
+            border-2 border-primary rounded-lg 
+            hover:bg-primary hover:text-white 
+            transition-all"
+          >
             Nuestra Misión
-          </button>
+          </Link>
         </div>
       </div>
     </section>

@@ -16,12 +16,12 @@ export default function Footer() {
                 className="h-auto w-full"
                 priority
               />
-              <h2 className="text-lg font-bold tracking-tighter uppercase leading-none text-white">
+              <h2 className="text-lg font-bold tracking-tighter uppercase leading-none text-white ">
                 Nunca Fuimos <br />
                 Normales
               </h2>
             </div>
-            <p className="text-gray-400 text-sm leading-relaxed mb-6">
+            <p className="text-gray-400 text-s leading-relaxed mb-6">
               El podcast definitivo sobre la cultura, los excesos y la genialidad del rock and roll.
             </p>
             <div className="flex gap-4">
@@ -57,7 +57,7 @@ export default function Footer() {
 
           {/* Navigation Column */}
           <div>
-            <h4 className="text-white font-black uppercase tracking-widest text-xs mb-8">
+            <h4 className="text-white font-black uppercase tracking-widest text-md mb-8">
               Navegación
             </h4>
             <ul className="space-y-4">
@@ -71,7 +71,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/blogs"
+                  href="#"
                   className="text-gray-400 text-sm hover:text-white transition-colors uppercase tracking-widest font-medium"
                 >
                   Episodios
@@ -98,7 +98,7 @@ export default function Footer() {
 
           {/* Legal Column */}
           <div>
-            <h4 className="text-white font-black uppercase tracking-widest text-xs mb-8">
+            <h4 className="text-white font-black uppercase tracking-widest text-md mb-8">
               Legales
             </h4>
             <ul className="space-y-4">
@@ -142,11 +142,12 @@ export default function Footer() {
                 className="w-full bg-black border-white/10 rounded-lg text-s py-3 px-4 focus:ring-primary focus:border-primary text-white"
                 placeholder="Email"
                 type="email"
+                id="email"
                 required
               />
               <button
                 type="submit"
-                className="w-full bg-primary py-3 rounded-lg text-white font-bold text-xs uppercase tracking-widest hover:bg-primary/90 transition-all"
+                className="w-full bg-primary py-3 rounded-lg text-white font-bold text-xs uppercase tracking-widest hover:bg-primary/70 transition-all"
               >
                 Suscribirme
               </button>

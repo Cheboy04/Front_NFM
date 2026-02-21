@@ -3,7 +3,6 @@ import { drupal } from "@/lib/drupal"
 import type { Metadata } from "next"
 import type { DrupalNode } from "next-drupal"
 import Link from "next/link"
-import Layout from '@/components/layout/Layout';
 import HeroSection from '@/components/home/HeroSection';
 import CTASection from '@/components/home/CTASection';
 import AboutSection from '@/components/home/AboutSection';
@@ -45,7 +44,6 @@ export default async function Home() {
 
   return (
     <>
-    <Layout>
           <HeroSection />
     
           {/* Latest Episodes Section - Placeholder para implementar después */}
@@ -98,7 +96,6 @@ export default async function Home() {
           </section>
     
           <AboutSection />
-        </Layout>
       
     </>
   )

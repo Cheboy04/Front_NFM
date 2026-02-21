@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Layout from '@/components/layout/Layout';
 import BlogHero from '@/components/blog/BlogHero';
 import FilterBar from '@/components/blog/FilterBar';
 import BlogCard from '@/components/blog/BlogCard';
@@ -46,7 +45,7 @@ export default async function BlogsPage() {
   const bottomArticles = regularArticles.slice(2);
 
   return (
-    <Layout>
+    <>
       {/* Hero Section */}
       <BlogHero />
 
@@ -103,6 +102,6 @@ export default async function BlogsPage() {
         {/* Sidebar */}
         <BlogSidebar />
       </main>
-    </Layout>
+      </>
   );
 }
