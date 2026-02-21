@@ -11,7 +11,7 @@ export default function Navbar() {
           <Image
             src={nfmLogo}
             alt="Logo Nunca Fuimos Normales"
-            className="h-full w-auto"
+            className="h-[90%] w-auto"
             priority
           />
           <h1 className="text-xl font-bold tracking-tighter uppercase leading-none">
@@ -29,7 +29,7 @@ export default function Navbar() {
             Home
           </Link>
           <Link
-            href="/blogs"
+            href="/blog"
             className="text-sm font-semibold uppercase tracking-widest hover:text-primary transition-colors"
           >
             Blogs
