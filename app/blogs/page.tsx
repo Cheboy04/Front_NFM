@@ -24,14 +24,32 @@ export default async function BlogsPage() {
   const articles = await drupal.getResourceCollection<DrupalArticle[]>('node--article', {
     params: {
       'filter[status]': 1,
-      'include': 'field_image ', //,field_category
+      'include': 'field_image,field_category', //,field_category
       'sort': '-created',
       'page[limit]': 12,
     },
     next: {
       revalidate: 3600,
     },
-  });
+  })
+  
+  const categories = await drupal.getResourceCollection('taxonomy_term--categorias', {
+  params: {
+    'filter[status]': 1,
+    'fields[taxonomy_term--categorias]': 'name,drupal_internal__tid',
+    'sort': 'name',
+  },
+  next: { revalidate: 3600 },
+});
+
+// Transformar al formato que espera FilterBar:
+const categoryOptions = [
+  { id: 'all', name: 'Todos' },
+  ...categories.map((cat: any) => ({
+    id: String(cat.drupal_internal__tid),
+    name: cat.name,
+  })),
+];;
 
   // Get featured article (first one with field_featured or just the latest)
   const featuredArticle = articles.find((article) => article.field_featured) || articles[0];
@@ -50,7 +68,7 @@ export default async function BlogsPage() {
       <BlogHero />
 
       {/* Filter Bar - Client Component */}
-      <FilterBar activeCategory="all" />
+      <FilterBar activeCategory="all" categories={categoryOptions}/>
 
       {/* Main Content Grid */}
       <main className="max-w-7xl mx-auto px-6 lg:px-20 py-16 grid grid-cols-1 lg:grid-cols-12 gap-12">

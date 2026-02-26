@@ -5,6 +5,8 @@ export type { DrupalNode, DrupalFile, DrupalTaxonomyTerm };
 
 // Drupal Media (Images)
 export interface DrupalMedia extends DrupalFile {
+  type: string;
+  id: string;
   uri: {
     value: string;
     url: string;

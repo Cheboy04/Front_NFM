@@ -55,6 +55,9 @@ export default function FilterBar({
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         {/* Search Input */}
         <div className="relative w-full md:w-[300px]">
+          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-lg pointer-events-none">
+            search
+          </span>
           <input
             className="w-full bg-white/5 border-white/10 rounded-full py-2 pl-10 pr-4 text-sm focus:ring-primary focus:border-primary text-white placeholder-gray-500"
             placeholder="Buscar historia..."
