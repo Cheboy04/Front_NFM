@@ -1,7 +1,7 @@
 import { DraftAlert } from "@/components/misc/DraftAlert"
 import type { Metadata } from "next"
 import type { ReactNode } from "react"
-import { Space_Grotesk } from 'next/font/google';
+import { Space_Grotesk, Lora } from 'next/font/google';
 import Head from 'next/head';
 import "@/styles/globals.css"
 import Navbar from "@/components/layout/Navbar"
@@ -11,6 +11,13 @@ const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
   variable: '--font-space-grotesk',
+  display: 'swap',
+});
+const lora = Lora({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  style: ['normal', 'italic'],
+  variable: '--font-lora',
   display: 'swap',
 });
 
@@ -68,7 +75,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </Head>
-      <body className={`${spaceGrotesk.variable} font-display antialiased min-h-screen flex flex-col`}>
+      <body className={`${spaceGrotesk.variable} ${lora.variable} font-display antialiased min-h-screen flex flex-col`}>
         <DraftAlert />
         <div className="flex-1">
           <Navbar />

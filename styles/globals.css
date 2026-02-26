@@ -37,22 +37,95 @@
     transform: translateX(40px) rotate(180deg);
   }
   .vinyl-bg {
-  background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%);
-  position: relative;
-}
+    background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%);
+    position: relative;
+  }
 
-.vinyl-bg::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: repeating-radial-gradient(
-    circle at center,
-    transparent 0,
-    transparent 2px,
-    rgba(255, 255, 255, 0.03) 3px,
-    transparent 4px
-  );
-}
+  .vinyl-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-radial-gradient(
+      circle at center,
+      transparent 0,
+      transparent 2px,
+      rgba(255, 255, 255, 0.03) 3px,
+      transparent 4px
+    );
+  }
+  .article-body {
+    @apply font-serif text-gray-300;
+  }
+
+  .article-body p {
+    @apply text-[18px] leading-relaxed mb-8 text-gray-300;
+  }
+
+  .article-body h2 {
+    @apply font-display font-black text-3xl uppercase tracking-tighter mt-12 mb-6 border-l-4 border-primary pl-6 text-white italic;
+  }
+
+  .article-body h3 {
+    @apply font-display font-bold text-2xl uppercase tracking-tight mt-10 mb-4 text-white;
+  }
+
+  .article-body a {
+    @apply text-primary underline decoration-primary/40 hover:decoration-primary transition-all;
+  }
+
+  .article-body strong {
+    @apply text-white font-bold;
+  }
+
+  .article-body em {
+    @apply italic text-gray-200;
+  }
+
+  .article-body ul {
+    @apply space-y-3 mb-8 pl-6;
+  }
+
+  .article-body ul li {
+    @apply relative text-gray-300 text-[17px] leading-relaxed;
+  }
+
+  .article-body ul li::before {
+    content: '';
+    @apply absolute -left-4 top-3 w-1.5 h-1.5 bg-primary rounded-full;
+  }
+
+  .article-body ol {
+    @apply space-y-3 mb-8 pl-6 list-decimal list-outside;
+  }
+
+  .article-body ol li {
+    @apply text-gray-300 text-[17px] leading-relaxed pl-2;
+  }
+
+  .article-body blockquote {
+    @apply my-12 py-8 px-10 border-l-4 border-primary bg-zinc-900/50 rounded-r-xl;
+  }
+
+  .article-body blockquote p {
+    @apply text-2xl font-black uppercase italic text-primary leading-tight mb-0;
+  }
+
+  .article-body img {
+    @apply w-full rounded-xl my-10 object-cover;
+  }
+
+  .article-body figure {
+    @apply my-10;
+  }
+
+  .article-body figcaption {
+    @apply text-center text-xs text-gray-500 uppercase tracking-widest mt-3 font-bold;
+  }
+
+  .article-body hr {
+    @apply border-white/10 my-12;
+  }
+
 }
 
 @layer utilities {

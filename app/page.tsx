@@ -6,6 +6,7 @@ import Link from "next/link"
 import HeroSection from '@/components/home/HeroSection';
 import CTASection from '@/components/home/CTASection';
 import AboutSection from '@/components/home/AboutSection';
+import BlogCard from "@/components/blog/BlogCard"
 
 export const metadata: Metadata = {
   title: 'Nunca Fuimos Normales | El Lado B del Disco',
@@ -27,14 +28,14 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const nodes = await drupal.getResourceCollection<DrupalNode[]>(
+  const articles = await drupal.getResourceCollection<DrupalNode[]>(
     "node--article",
     {
       params: {
         "filter[status]": 1,
-        "fields[node--article]": "title,path,field_image,uid,created",
-        include: "field_image,uid",
-        sort: "-created",
+        "include": "field_image,field_category",
+        "sort": "-created",
+        "page[limit]": 3,
       },
       next: {
         revalidate: 3600,
@@ -69,30 +70,35 @@ export default async function Home() {
           </section>
     
           <CTASection />
-          {/* <h1 className="mb-10 text-6xl font-black">Latest Articles.</h1>
-            {nodes?.length ? (
-              nodes.map((node) => (
-                <div key={node.id}>
-                  <ArticleTeaser node={node} />
-                  <hr className="my-20" />
-                </div>
-              ))
-            ) : (
-              <p className="py-4">No nodes found</p>
-            )} */}
     
           {/* Backstage Blog Section - Placeholder */}
           <section className="py-24 px-6 lg:px-20 max-w-7xl mx-auto">
-            <div className="flex flex-col mb-16">
-              <h3 className="text-4xl font-black uppercase tracking-tighter mb-2 italic">
-                HISTORIAS DESDE EL BACKSTAGE
-              </h3>
-              <div className="h-1.5 w-24 bg-primary"></div>
-            </div>
-            {/* Aquí irán los artículos del blog - se implementará después con datos de Drupal */}
-            <div className="text-center text-gray-500 py-20">
-              <p className="text-lg">Los artículos se cargarán desde Drupal...</p>
-            </div>
+            <div className="flex items-end justify-between mb-16">
+          <div>
+            <h3 className="text-4xl font-black uppercase tracking-tighter mb-2 italic">
+              HISTORIAS DESDE EL BACKSTAGE
+            </h3>
+            <div className="h-1.5 w-24 bg-primary"></div>
+          </div>
+          <Link
+            href="/blogs"
+            className="text-primary font-bold uppercase tracking-widest text-sm border-b-2 border-primary/20 hover:border-primary pb-1 transition-all"
+          >
+            Ver todos
+          </Link>
+        </div>
+
+        {articles?.length ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {articles.map((article) => (
+              <BlogCard key={article.id} article={article} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center text-gray-500 py-20">
+            <p className="text-lg">No hay artículos disponibles en este momento.</p>
+          </div>
+        )}
           </section>
     
           <AboutSection />

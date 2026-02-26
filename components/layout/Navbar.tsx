@@ -35,6 +35,12 @@ export default function Navbar() {
             Blogs
           </Link>
           <Link
+            href="/about"
+            className="text-sm font-semibold uppercase tracking-widest hover:text-primary transition-colors"
+          >
+            Nosotros
+          </Link>
+          <Link
             href="/contactanos"
             className="text-sm font-semibold uppercase tracking-widest hover:text-primary transition-colors"
           >

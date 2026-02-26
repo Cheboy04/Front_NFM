@@ -17,6 +17,7 @@ const config: Config = {
       },
       fontFamily: {
         display: ['Space Grotesk', 'sans-serif'],
+        serif: ['Lora', 'serif'],
       },
       borderRadius: {
         DEFAULT: '0.25rem',

@@ -8,7 +8,7 @@ const nextConfig = {
       {
         protocol: 'http',
         hostname: 'localhost',
-        port: '8081',
+        port: '8085',
         pathname: '/sites/default/files/**',
       },
     ],
