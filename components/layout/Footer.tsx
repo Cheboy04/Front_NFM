@@ -32,7 +32,7 @@ export default function Footer() {
                 className="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center hover:bg-primary transition-colors"
                 aria-label="Instagram"
               >
-                <span className="material-symbols-outlined text-lg">.</span>
+                <span className="material-symbols-outlined text-lg">public</span>
               </a>
               <a
                 href="https://open.spotify.com/show/56jjWvbGxEQiCVoVuc0vGo"
@@ -41,7 +41,7 @@ export default function Footer() {
                 className="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center hover:bg-primary transition-colors"
                 aria-label="Spotify"
               >
-                <span className="material-symbols-outlined text-lg">.</span>
+                <span className="material-symbols-outlined text-lg">podcasts</span>
               </a>
               <a
                 href="https://www.youtube.com/@NuncaFuimosNormalesROCKTALKS"
@@ -50,7 +50,7 @@ export default function Footer() {
                 className="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center hover:bg-primary transition-colors"
                 aria-label="YouTube"
               >
-                <span className="material-symbols-outlined text-lg">.</span>
+                <span className="material-symbols-outlined text-lg">smart_display</span>
               </a>
             </div>
           </div>

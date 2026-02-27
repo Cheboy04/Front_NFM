@@ -68,13 +68,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className="dark">
-      <Head>
+      <head>
         {/* Google Material Symbols */}
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           rel="stylesheet"
         />
-      </Head>
+      </head>
       <body className={`${spaceGrotesk.variable} ${lora.variable} font-display antialiased min-h-screen flex flex-col`}>
         <DraftAlert />
         <div className="flex-1">
