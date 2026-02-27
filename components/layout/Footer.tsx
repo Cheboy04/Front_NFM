@@ -9,18 +9,16 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-32 mb-20">
           {/* Brand Column */}
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-3 mb-6">
+            <Link href="/" className="inline-block mb-6 hover:opacity-80 transition-opacity">
               <Image
                 src={nfmLogo}
                 alt="Logo Nunca Fuimos Normales"
-                className="h-auto w-full"
+                width={120}
+                height={120}
+                className="w-[120px] h-auto"
                 priority
               />
-              <h2 className="text-lg font-bold tracking-tighter uppercase leading-none text-white ">
-                Nunca Fuimos <br />
-                Normales
-              </h2>
-            </div>
+            </Link>
             <p className="text-gray-400 text-s leading-relaxed mb-6">
               El podcast definitivo sobre la cultura, los excesos y la genialidad del rock and roll.
             </p>

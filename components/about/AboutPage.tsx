@@ -57,15 +57,8 @@ export default function AboutPage() {
                 priority
               />
         </div>
-        
-
+      
         <div className="relative z-20 text-center px-6">
-          {/* Logo círculo */}
-          {/* <div className="flex justify-center mb-6">
-            <div className="w-[130px] h-[130px] bg-primary rounded-full flex items-center justify-center shadow-2xl border-4 border-white/10">
-              <span className="material-symbols-outlined text-6xl text-white">album</span>
-            </div>
-          </div> */}
 
           <h2 className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-none mb-2">
             NUNCA FUIMOS <span className="text-primary">NORMALES</span>
