@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef } from 'react';
-import nfmLogo from '@/public/images/Logo-NFM.svg'
+import heroImage from '@/public/images/hero-aboutUs.png'
 
 const SOUNDWAVE_DELAYS = [0.1, 0.3, 0.2, 0.4, 0.1, 0.5, 0.2, 0.3];
 
@@ -50,12 +50,14 @@ export default function AboutPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-background-dark z-10" />
           {/* Imagen de fondo — reemplaza con tu imagen real */}
           <Image
-                src={nfmLogo}
-                alt="Logo Nunca Fuimos Normales"
-                className="h-auto w-full"
+                src={heroImage}
+                alt="Recording studio console and microphones"
+                fill
+                className="fill object-cover"
                 priority
               />
         </div>
+        
 
         <div className="relative z-20 text-center px-6">
           {/* Logo círculo */}
