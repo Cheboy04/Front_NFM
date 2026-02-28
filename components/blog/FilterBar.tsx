@@ -10,6 +10,14 @@ interface FilterBarProps {
   activeCategory?: string;
 }
 
+const DEFAULT_CATEGORIES = [
+  { id: 'all', name: 'Todos' },
+  { id: 'polemicas', name: 'Polémicas' },
+  { id: 'historias', name: 'Historias' },
+  { id: 'equipamiento', name: 'Equipamiento' },
+  { id: 'entrevistas', name: 'Entrevistas' },
+];
+
 export default function FilterBar({
   categories = [],
   onSearch,
@@ -18,48 +26,29 @@ export default function FilterBar({
   activeCategory = 'all',
 }: FilterBarProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState(activeCategory);
+  const categoriesToShow = categories.length > 0 ? categories : DEFAULT_CATEGORIES;
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
     setSearchQuery(query);
-    if (onSearch) {
-      onSearch(query);
-      console.log(query);
-    }
-  };
-
-  const handleCategoryClick = (categoryId: string) => {
-    setSelectedCategory(categoryId);
-    onFilterCategory?.(categoryId);
+    onSearch?.(query);
   };
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (onSort) {
-      onSort(e.target.value);
-    }
+    onSort?.(e.target.value);
   };
-
-  const defaultCategories = [
-    { id: 'all', name: 'Todos' },
-    { id: 'polemicas', name: 'Polémicas' },
-    { id: 'historias', name: 'Historias' },
-    { id: 'equipamiento', name: 'Equipamiento' },
-    { id: 'entrevistas', name: 'Entrevistas' },
-  ];
-
-  const categoriesToShow = categories.length > 0 ? categories : defaultCategories;
 
   return (
     <div className="sticky top-[73px] z-50 w-full border-b border-white/10 bg-background-dark/95 backdrop-blur-sm py-4 px-6 lg:px-20">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+
         {/* Search Input */}
         <div className="relative w-full md:w-[300px]">
           <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-lg pointer-events-none">
             search
           </span>
           <input
-            className="w-full bg-white/5 border-white/10 rounded-full py-2 pl-10 pr-4 text-sm focus:ring-primary focus:border-primary text-white placeholder-gray-500"
+            className="w-full bg-white/5 border border-white/10 rounded-full py-2 pl-10 pr-4 text-sm focus:outline-none focus:border-primary text-white placeholder-gray-500 transition-colors"
             placeholder="Buscar historia..."
             type="text"
             value={searchQuery}
@@ -67,14 +56,14 @@ export default function FilterBar({
           />
         </div>
 
-        {/* Category Filters */}
+        {/* Category Filters — estado controlado por el padre via activeCategory */}
         <div className="flex flex-wrap items-center justify-center gap-2">
           {categoriesToShow.map((category) => (
             <button
               key={category.id}
-              onClick={() => handleCategoryClick(category.id)}
+              onClick={() => onFilterCategory?.(category.id)}
               className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest transition-colors ${
-                selectedCategory === category.id
+                activeCategory === category.id
                   ? 'bg-primary text-white'
                   : 'bg-white/5 hover:bg-white/10'
               }`}
@@ -93,7 +82,6 @@ export default function FilterBar({
             defaultValue="recent"
           >
             <option value="recent">Recientes</option>
-            <option value="popular">Más Vistos</option>
             <option value="oldest">Más Antiguos</option>
           </select>
         </div>

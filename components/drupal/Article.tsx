@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { absoluteUrl, formatDate } from '@/lib/utils';
-import type { DrupalNode } from 'next-drupal';
+import { getMostRecentPlaylists } from '@/lib/spotify';
 import type { DrupalArticle } from '@/lib/types';
 
 interface ArticleProps {
@@ -9,7 +9,7 @@ interface ArticleProps {
   relatedArticles?: DrupalArticle[];
 }
 
-export function Article({ node, relatedArticles = [] }: ArticleProps) {
+export async function Article({ node, relatedArticles = [] }: ArticleProps) {
   const imageUrl = node.field_image?.uri?.url
     ? absoluteUrl(node.field_image.uri.url)
     : null;
@@ -18,6 +18,8 @@ export function Article({ node, relatedArticles = [] }: ArticleProps) {
   const category = node.field_category?.name;
   const readingTime = node.field_reading_time;
   const author = node.uid?.display_name;
+  const playlist = await getMostRecentPlaylists();
+  const playlistImage = playlist?.images?.[0]?.url;
 
   return (
     <>
@@ -36,39 +38,33 @@ export function Article({ node, relatedArticles = [] }: ArticleProps) {
           ) : (
             <div className="w-full h-full bg-zinc-900" />
           )}
-          {/* Gradiente de abajo hacia arriba */}
           <div className="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/40 to-transparent z-10" />
           <div className="grunge-overlay absolute inset-0 opacity-20" />
         </div>
 
         <div className="relative z-20 max-w-7xl mx-auto px-6 lg:px-20 w-full pb-16">
-          {/* Categoría */}
           {category && (
             <span className="inline-block bg-primary px-3 py-1 text-[10px] font-black tracking-[0.2em] uppercase mb-4">
               {category}
             </span>
           )}
-
-          {/* Título */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-black leading-[0.9] tracking-tighter uppercase mb-6 italic max-w-4xl">
             {node.title}
           </h1>
-
-          {/* Meta */}
           <div className="flex flex-wrap items-center gap-6 text-xs font-bold uppercase tracking-widest text-gray-400">
             {author && (
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary text-base">person</span> {/* Cambiar por iconos */}
+                <span className="material-symbols-outlined text-primary text-base">person</span>
                 <span>Por: {author}</span>
               </div>
             )}
             <div className="flex items-center gap-2 border-l border-white/20 pl-6">
-              <span className="material-symbols-outlined text-primary text-base">calendar_today</span> {/* Cambiar por iconos */}
+              <span className="material-symbols-outlined text-primary text-base">calendar_today</span>
               <span>{formatDate(node.created)}</span>
             </div>
             {readingTime && (
               <div className="flex items-center gap-2 border-l border-white/20 pl-6">
-                <span className="material-symbols-outlined text-primary text-base">schedule</span> {/* Cambiar por iconos */}
+                <span className="material-symbols-outlined text-primary text-base">schedule</span>
                 <span>{readingTime} MIN LECTURA</span>
               </div>
             )}
@@ -82,26 +78,19 @@ export function Article({ node, relatedArticles = [] }: ArticleProps) {
         {/* Sidebar sticky de sharing */}
         <aside className="hidden lg:block w-12 sticky top-32 h-fit pt-16">
           <div className="flex flex-col items-center gap-6">
-            {/* Barra de progreso decorativa */}
             <div className="h-40 w-1 bg-white/10 relative overflow-hidden rounded-full">
               <div className="absolute top-0 left-0 w-full bg-primary h-1/3" />
             </div>
-            <button
-              aria-label="Compartir"
-              className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 hover:border-primary hover:text-primary transition-all"
-            >
+            <button aria-label="Compartir"
+              className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 hover:border-primary hover:text-primary transition-all">
               <span className="material-symbols-outlined text-xl">share</span>
             </button>
-            <button
-              aria-label="Me gusta"
-              className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 hover:border-primary hover:text-primary transition-all"
-            >
+            <button aria-label="Me gusta"
+              className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 hover:border-primary hover:text-primary transition-all">
               <span className="material-symbols-outlined text-xl">thumb_up</span>
             </button>
-            <button
-              aria-label="Comentarios"
-              className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 hover:border-primary hover:text-primary transition-all"
-            >
+            <button aria-label="Comentarios"
+              className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 hover:border-primary hover:text-primary transition-all">
               <span className="material-symbols-outlined text-xl">chat</span>
             </button>
           </div>
@@ -110,14 +99,12 @@ export function Article({ node, relatedArticles = [] }: ArticleProps) {
         {/* Contenido principal */}
         <main className="w-full max-w-[800px] py-16 mx-auto lg:mx-0">
 
-          {/* Excerpt como intro destacada */}
           {node.field_excerpt && (
             <p className="text-xl italic text-gray-400 font-serif mb-12 leading-relaxed border-l-4 border-primary/40 pl-6">
               {node.field_excerpt}
             </p>
           )}
 
-          {/* Body de Drupal */}
           {node.body?.processed && (
             <div
               dangerouslySetInnerHTML={{ __html: node.body.processed }}
@@ -125,42 +112,87 @@ export function Article({ node, relatedArticles = [] }: ArticleProps) {
             />
           )}
 
-          {/* Widget de episodio relacionado (decorativo por ahora) */}
-          <div className="my-16 bg-zinc-900 p-6 rounded-2xl border border-white/10 flex flex-col md:flex-row items-center gap-6">
-            <div className="w-20 h-20 bg-zinc-800 rounded-lg overflow-hidden shrink-0 flex items-center justify-center border border-white/10">
-              <span className="material-symbols-outlined text-primary text-4xl">album</span>
-            </div>
-            <div className="flex-1">
-              <span className="text-primary text-[10px] font-bold uppercase tracking-widest mb-1 block">
-                Escuchar en Spotify
-              </span>
-              <h4 className="font-display font-bold text-lg uppercase mb-1">
-                Episodio relacionado
-              </h4>
-              <p className="text-gray-500 text-xs mb-3">Nunca Fuimos Normales</p>
-              <div className="w-full bg-white/10 h-1 rounded-full relative overflow-hidden">
-                <div className="absolute top-0 left-0 h-full bg-primary w-1/3" />
+          {/* ── WIDGET PLAYLIST ── */}
+          {playlist ? (
+            <a
+              href={playlist.external_urls.spotify}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="my-16 bg-zinc-900 p-6 rounded-2xl border border-white/10 flex flex-col md:flex-row items-center gap-6 hover:border-primary/30 transition-colors group block"
+            >
+              {/* Imagen de la playlist */}
+              <div className="w-20 h-20 rounded-lg overflow-hidden shrink-0 relative bg-zinc-800">
+                {playlistImage ? (
+                  <Image
+                    src={playlistImage}
+                    alt={playlist.name}
+                    fill
+                    className="object-cover"
+                    sizes="80px"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <span className="material-symbols-outlined text-primary text-3xl">queue_music</span>
+                  </div>
+                )}
               </div>
-            </div>
+
+              {/* Info */}
+              <div className="flex-1 min-w-0">
+                <span className="text-primary text-[10px] font-bold uppercase tracking-widest mb-1 block flex items-center gap-1">
+                  <span className="material-symbols-outlined text-sm">queue_music</span>
+                  Playlist de la Semana
+                </span>
+                <h4 className="font-display font-bold text-lg uppercase mb-1 truncate group-hover:text-primary transition-colors">
+                  {playlist.name}
+                </h4>
+                <p className="text-gray-500 text-xs mb-3">
+                  {playlist.tracks?.total ? `${playlist.tracks.total} canciones · ` : ''}
+                  Nunca Fuimos Normales
+                </p>
+                <div className="w-full bg-white/10 h-1 rounded-full relative overflow-hidden">
+                  <div className="absolute top-0 left-0 h-full bg-primary w-1/3" />
+                </div>
+              </div>
+
+              {/* Botón play */}
+              <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shrink-0 shadow-lg shadow-primary/20">
+                <span className="material-symbols-outlined text-white translate-x-0.5">play_arrow</span>
+              </div>
+            </a>
+          ) : (
+            /* Fallback si no hay playlist */
             <a
               href="https://open.spotify.com/show/56jjWvbGxEQiCVoVuc0vGo"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-12 h-12 bg-primary rounded-full flex items-center justify-center hover:scale-110 transition-transform shrink-0"
-              aria-label="Reproducir episodio"
+              className="my-16 bg-zinc-900 p-6 rounded-2xl border border-white/10 flex flex-col md:flex-row items-center gap-6 hover:border-primary/30 transition-colors group block"
             >
-              <span className="material-symbols-outlined text-white">play_arrow</span>
+              <div className="w-20 h-20 bg-zinc-800 rounded-lg overflow-hidden shrink-0 flex items-center justify-center border border-white/10">
+                <span className="material-symbols-outlined text-primary text-4xl">album</span>
+              </div>
+              <div className="flex-1">
+                <span className="text-primary text-[10px] font-bold uppercase tracking-widest mb-1 block">
+                  Escuchar en Spotify
+                </span>
+                <h4 className="font-display font-bold text-lg uppercase mb-1">Nunca Fuimos Normales</h4>
+                <p className="text-gray-500 text-xs mb-3">El podcast definitivo del rock</p>
+                <div className="w-full bg-white/10 h-1 rounded-full relative overflow-hidden">
+                  <div className="absolute top-0 left-0 h-full bg-primary w-1/3" />
+                </div>
+              </div>
+              <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
+                <span className="material-symbols-outlined text-white translate-x-0.5">play_arrow</span>
+              </div>
             </a>
-          </div>
+          )}
 
           {/* Tags */}
           {node.field_tags && node.field_tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-12 pt-8 border-t border-white/10">
               {node.field_tags.map((tag) => (
-                <span
-                  key={tag.id}
-                  className="px-3 py-1 bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-widest text-gray-400 rounded-full"
-                >
+                <span key={tag.id}
+                  className="px-3 py-1 bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-widest text-gray-400 rounded-full">
                   {tag.name}
                 </span>
               ))}
@@ -181,17 +213,15 @@ export function Article({ node, relatedArticles = [] }: ArticleProps) {
           <p className="text-black/80 font-bold text-lg mb-10 leading-tight uppercase">
             Únete al backstage para recibir contenido inédito y desgloses técnicos de los discos que marcaron tu vida.
           </p>
-          <form className="flex flex-col sm:flex-row gap-4" /* onSubmit={(e) => e.preventDefault()} */>
+          <form className="flex flex-col sm:flex-row gap-4">
             <input
               className="flex-1 bg-black text-white border-none px-6 py-4 rounded-lg focus:ring-2 focus:ring-black placeholder-gray-500 text-sm"
               placeholder="TU EMAIL DE ROCKSTAR"
               type="email"
               required
             />
-            <button
-              type="submit"
-              className="bg-black text-white px-8 py-4 font-black uppercase tracking-widest hover:bg-zinc-800 transition-colors rounded-lg text-xs"
-            >
+            <button type="submit"
+              className="bg-black text-white px-8 py-4 font-black uppercase tracking-widest hover:bg-zinc-800 transition-colors rounded-lg text-xs">
               SUSCRIBIRME
             </button>
           </form>
@@ -213,7 +243,6 @@ export function Article({ node, relatedArticles = [] }: ArticleProps) {
                 ? absoluteUrl(article.field_image.uri.url)
                 : null;
               const relPath = article.path?.alias || `/node/${article.drupal_internal__nid}`;
-
               return (
                 <Link key={article.id} href={relPath} className="group cursor-pointer block">
                   <div className="aspect-[4/5] overflow-hidden rounded-xl bg-zinc-800 mb-6 relative">

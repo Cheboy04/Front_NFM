@@ -11,6 +11,14 @@ const nextConfig = {
         port: '8085',
         pathname: '/sites/default/files/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'i.scdn.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'mosaic.scdn.co',
+      },
     ],
   },
 }

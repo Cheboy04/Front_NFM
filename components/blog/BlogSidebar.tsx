@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import type { SpotifyPlaylist } from '@/lib/spotify';
 
 interface Band {
   name: string;
@@ -7,18 +8,20 @@ interface Band {
 
 interface BlogSidebarProps {
   topBands?: Band[];
+  playlist?: SpotifyPlaylist;
 }
 
-export default function BlogSidebar({ topBands }: BlogSidebarProps) {
-  const defaultBands: Band[] = [
-    { name: 'Pink Floyd', postCount: 42 },
-    { name: 'Led Zeppelin', postCount: 38 },
-    { name: 'Nirvana', postCount: 31 },
-    { name: 'Rolling Stones', postCount: 27 },
-    { name: 'Black Sabbath', postCount: 22 },
-  ];
+const DEFAULT_BANDS: Band[] = [
+  { name: 'Pink Floyd', postCount: 42 },
+  { name: 'Led Zeppelin', postCount: 38 },
+  { name: 'Nirvana', postCount: 31 },
+  { name: 'Rolling Stones', postCount: 27 },
+  { name: 'Black Sabbath', postCount: 22 },
+];
 
-  const bandsToShow = topBands && topBands.length > 0 ? topBands : defaultBands;
+export default function BlogSidebar({ topBands, playlist }: BlogSidebarProps) {
+  const bandsToShow = topBands?.length ? topBands : DEFAULT_BANDS;
+  const playlistImage = playlist?.images?.[0]?.url;
 
   return (
     <aside className="lg:col-span-4 space-y-12">
@@ -70,27 +73,54 @@ export default function BlogSidebar({ topBands }: BlogSidebarProps) {
       </div>
 
       {/* Playlist Widget */}
-      <div className="relative rounded-xl overflow-hidden aspect-square group">
-        <Image
-          src="/images/playlist-cover.jpg"
-          alt="Playlist de la semana"
-          fill
-          className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-          sizes="(max-width: 1024px) 100vw, 33vw"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent flex flex-col justify-end p-6">
-          <span className="text-primary font-black text-[10px] tracking-widest uppercase mb-2">
-            Playlist de la Semana
-          </span>
-          <h5 className="text-xl font-bold uppercase mb-4 leading-tight">
-            Psicodelia Británica: Los Años de Oro
-          </h5>
-          <button className="flex items-center gap-2 text-white font-bold text-[10px] uppercase tracking-widest hover:text-primary transition-colors">
-            <span className="material-symbols-outlined text-base">play_circle</span> ESCUCHAR EN
-            SPOTIFY
-          </button>
-        </div>
-      </div>
+      {playlist ? (
+              <a
+                href={playlist.external_urls.spotify}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative rounded-xl overflow-hidden aspect-square group block"
+              >
+                {/* Imagen de la playlist */}
+                {playlistImage ? (
+                  <Image
+                    src={playlistImage}
+                    alt={playlist.name}
+                    fill
+                    className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                    sizes="(max-width: 1024px) 100vw, 33vw"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-zinc-800 flex items-center justify-center">
+                    <span className="material-symbols-outlined text-white/20 text-7xl">queue_music</span>
+                  </div>
+                )}
+      
+                {/* Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex flex-col justify-end p-6">
+                  <span className="text-primary font-black text-[10px] tracking-widest uppercase mb-2 flex items-center gap-2">
+                    <span className="material-symbols-outlined text-sm">queue_music</span>
+                    Playlist de la Semana
+                  </span>
+                  <h5 className="text-lg font-black uppercase mb-1 leading-tight line-clamp-2">
+                    {playlist.name}
+                  </h5>
+                  {playlist.tracks?.total && (
+                    <p className="text-gray-400 text-[10px] uppercase tracking-widest mb-4">
+                      {playlist.tracks.total} canciones
+                    </p>
+                  )}
+                  <div className="flex items-center gap-2 text-white font-bold text-[10px] uppercase tracking-widest group-hover:text-primary transition-colors">
+                    <span className="material-symbols-outlined text-base">play_circle</span>
+                    ESCUCHAR EN SPOTIFY
+                  </div>
+                </div>
+              </a>
+            ) : (
+              // Fallback si no hay playlist
+              <div className="relative rounded-xl overflow-hidden aspect-square bg-zinc-900 border border-white/5 flex items-center justify-center">
+                <span className="material-symbols-outlined text-white/10 text-8xl">queue_music</span>
+              </div>
+            )}
     </aside>
   );
 }

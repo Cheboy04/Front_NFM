@@ -2,11 +2,13 @@ import { ArticleTeaser } from "@/components/drupal/ArticleTeaser"
 import { drupal } from "@/lib/drupal"
 import type { Metadata } from "next"
 import type { DrupalNode } from "next-drupal"
+import { getShowEpisodes, getMostRecentPlaylists } from "@/lib/spotify"
 import Link from "next/link"
 import HeroSection from '@/components/home/HeroSection';
 import CTASection from '@/components/home/CTASection';
 import AboutSection from '@/components/home/AboutSection';
 import BlogCard from "@/components/blog/BlogCard"
+import EpisodeCard from '@/components/episodes/EpisodeCard';
 
 export const metadata: Metadata = {
   title: 'Nunca Fuimos Normales | El Lado B del Disco',
@@ -28,46 +30,61 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const articles = await drupal.getResourceCollection<DrupalNode[]>(
-    "node--article",
-    {
-      params: {
-        "filter[status]": 1,
-        "include": "field_image,field_category",
-        "sort": "-created",
-        "page[limit]": 3,
-      },
-      next: {
-        revalidate: 3600,
-      },
-    }
-  )
+   const [episodes, articles] = await Promise.all([
+      getShowEpisodes(3), await drupal.getResourceCollection<DrupalNode[]>(
+      "node--article",
+      {
+        params: {
+          "filter[status]": 1,
+          "include": "field_image,field_category",
+          "sort": "-created",
+          "page[limit]": 3,
+        },
+        next: {
+          revalidate: 3600,
+        },
+      }
+    )
+   ]) 
+   const playlist = await getMostRecentPlaylists();
+  console.log(playlist);
+  
 
   return (
     <>
           <HeroSection />
     
-          {/* Latest Episodes Section - Placeholder para implementar después */}
-          <section className="py-24 px-6 lg:px-20 max-w-7xl mx-auto">
-            <div className="flex items-end justify-between mb-16">
-              <div>
-                <h3 className="text-4xl font-black uppercase tracking-tighter mb-2 italic">
-                  ÚLTIMOS CAPÍTULOS
-                </h3>
-                <div className="h-1.5 w-24 bg-primary"></div>
-              </div>
-              <Link
-                href="/blogs"
-                className="text-primary font-bold uppercase tracking-widest text-sm border-b-2 border-primary/20 hover:border-primary pb-1 transition-all"
-              >
-                Ver todos
-              </Link>
-            </div>
-            {/* Aquí irán los episodios - se implementará después con datos de Drupal */}
-            <div className="text-center text-gray-500 py-20">
-              <p className="text-lg">Los episodios se cargarán desde Drupal...</p>
-            </div>
-          </section>
+          {/* ── ÚLTIMOS CAPÍTULOS ── */}
+      <section className="py-24 px-6 lg:px-20 max-w-7xl mx-auto">
+        <div className="flex items-end justify-between mb-16">
+          <div>
+            <h3 className="text-4xl font-black uppercase tracking-tighter mb-2 italic">
+              ÚLTIMOS CAPÍTULOS
+            </h3>
+            <div className="h-1.5 w-24 bg-primary" />
+          </div>
+          <a
+            href={`https://open.spotify.com/show/${process.env.SPOTIFY_SHOW_ID}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary font-bold uppercase tracking-widest text-sm border-b-2 border-primary/20 hover:border-primary pb-1 transition-all"
+          >
+            Ver todos
+          </a>
+        </div>
+
+        {episodes?.length ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {episodes.map((episode, i) => (
+              <EpisodeCard key={episode.id} episode={episode} index={i} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center text-gray-500 py-20">
+            <p>No hay episodios disponibles.</p>
+          </div>
+        )}
+      </section>
     
           <CTASection />
     
