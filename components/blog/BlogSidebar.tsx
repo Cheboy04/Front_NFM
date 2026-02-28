@@ -1,27 +1,35 @@
 import Image from 'next/image';
-import type { SpotifyPlaylist } from '@/lib/spotify';
-
-interface Band {
-  name: string;
-  postCount: number;
-}
+import type { SpotifyPlaylist, SpotifyEpisode } from '@/lib/spotify';
 
 interface BlogSidebarProps {
-  topBands?: Band[];
   playlist?: SpotifyPlaylist;
+  latestEpisode?: SpotifyEpisode;
 }
 
-const DEFAULT_BANDS: Band[] = [
-  { name: 'Pink Floyd', postCount: 42 },
-  { name: 'Led Zeppelin', postCount: 38 },
-  { name: 'Nirvana', postCount: 31 },
-  { name: 'Rolling Stones', postCount: 27 },
-  { name: 'Black Sabbath', postCount: 22 },
-];
+function formatDuration(ms: number): string {
+  const total = Math.floor(ms / 60000);
+  const h = Math.floor(total / 60);
+  const m = total % 60;
+  return h > 0 ? `${h}h ${m}min` : `${m} min`;
+}
 
-export default function BlogSidebar({ topBands, playlist }: BlogSidebarProps) {
-  const bandsToShow = topBands?.length ? topBands : DEFAULT_BANDS;
+function formatDate(dateStr: string): string {
+  return new Date(dateStr).toLocaleDateString('es-ES', {
+    day: 'numeric', month: 'short', year: 'numeric',
+  }).toUpperCase();
+}
+
+function extractEpisodeNumber(name: string): string | null {
+  const match = name.match(/[Ee]pisodio\s+(\d+)/);
+  return match ? match[1] : null;
+}
+
+export default function BlogSidebar({ playlist, latestEpisode }: BlogSidebarProps) {
   const playlistImage = playlist?.images?.[0]?.url;
+  const episodeImage = latestEpisode?.images?.[0]?.url;
+  const epNumber = latestEpisode ? extractEpisodeNumber(latestEpisode.name) : null;
+  const cleanTitle = latestEpisode?.name.replace(/^[Ee]pisodio\s+\d+\s*[-–]\s*/, '') ?? '';
+
 
   return (
     <aside className="lg:col-span-4 space-y-12">
@@ -50,27 +58,69 @@ export default function BlogSidebar({ topBands, playlist }: BlogSidebarProps) {
         </form>
       </div>
 
-      {/* Top Bands Widget */}
-      <div>
-        <h4 className="text-white font-black uppercase tracking-widest text-xs mb-6 border-l-4 border-primary pl-4">
-          BANDAS MÁS BUSCADAS
-        </h4>
-        <ul className="space-y-4">
-          {bandsToShow.map((band, index) => (
-            <li
-              key={index}
-              className="flex items-center justify-between group cursor-pointer border-b border-white/5 pb-3 hover:border-primary/20 transition-colors"
-            >
-              <span className="text-sm font-bold text-gray-400 group-hover:text-white transition-colors">
-                {band.name}
-              </span>
-              <span className="text-[10px] bg-white/10 px-2 py-0.5 rounded text-gray-500">
-                {band.postCount} posts
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {/* Último Episodio */}
+
+      {latestEpisode && (
+        <div>
+          <h4 className="text-white font-black uppercase tracking-widest text-xs mb-6 border-l-4 border-primary pl-4">
+            ÚLTIMO EPISODIO
+          </h4>
+          <a
+            href={latestEpisode.external_urls.spotify}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group block bg-zinc-900/60 border border-white/5 rounded-2xl overflow-hidden hover:border-primary/30 transition-all duration-300"
+          >
+            {/* Imagen */}
+            <div className="relative aspect-square overflow-hidden bg-zinc-800">
+              {episodeImage ? (
+                <Image
+                  src={episodeImage}
+                  alt={latestEpisode.name}
+                  fill
+                  className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
+                  sizes="(max-width: 1024px) 100vw, 33vw"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="material-symbols-outlined text-white/20 text-7xl">album</span>
+                </div>
+              )}
+
+              {/* Overlay play */}
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center shadow-lg shadow-primary/30 scale-90 group-hover:scale-100 transition-transform">
+                  <span className="material-symbols-outlined text-white text-2xl translate-x-0.5">play_arrow</span>
+                </div>
+              </div>
+
+              {epNumber && (
+                <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-sm px-2.5 py-1 rounded text-[10px] font-black uppercase tracking-widest text-primary border border-primary/20">
+                  EP. {epNumber}
+                </div>
+              )}
+            </div>
+
+            {/* Info */}
+            <div className="p-5">
+              <h5 className="font-black uppercase tracking-tight text-sm leading-tight mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                {cleanTitle}
+              </h5>
+              <div className="flex items-center justify-between pt-3 border-t border-white/5">
+                <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-500">
+                  <span className="material-symbols-outlined text-primary text-sm">schedule</span>
+                  {formatDuration(latestEpisode.duration_ms)}
+                </div>
+                <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-500">
+                  <span className="material-symbols-outlined text-primary text-sm">calendar_today</span>
+                  {formatDate(latestEpisode.release_date)}
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      )}
+
 
       {/* Playlist Widget */}
       {playlist ? (

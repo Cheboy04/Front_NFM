@@ -46,9 +46,6 @@ export default async function Home() {
       }
     )
    ]) 
-   const playlist = await getMostRecentPlaylists();
-  console.log(playlist);
-  
 
   return (
     <>

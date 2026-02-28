@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
+import Image from 'next/image';
+import type { SpotifyEpisode } from '@/lib/spotify';
 
 const CONTACT_SUBJECTS = [
   'Sugerir una banda / artista',
@@ -28,9 +29,29 @@ const FAQS = [
   },
 ];
 
-export default function ContactPage() {
+function formatDuration(ms: number): string {
+  const total = Math.floor(ms / 60000);
+  const h = Math.floor(total / 60);
+  const m = total % 60;
+  return h > 0 ? `${h}h ${m}min` : `${m} min`;
+}
+
+function extractEpisodeNumber(name: string): string | null {
+  const match = name.match(/[Ee]pisodio\s+(\d+)/);
+  return match ? match[1] : null;
+}
+
+interface ContactPageProps {
+  latestEpisode?: SpotifyEpisode | null;
+}
+
+export default function ContactPage({ latestEpisode}: ContactPageProps) {
   const [charCount, setCharCount] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  const episodeImage = latestEpisode?.images?.[0]?.url;
+  const epNumber = latestEpisode ? extractEpisodeNumber(latestEpisode.name) : null;
+  const cleanTitle = latestEpisode?.name.replace(/^[Ee]pisodio\s+\d+\s*[-–]\s*/, '') ?? '';
 
   return (
     <>
@@ -274,23 +295,53 @@ export default function ContactPage() {
 
           {/* Mini player decorativo */}
           <a
-            href="https://open.spotify.com/show/56jjWvbGxEQiCVoVuc0vGo"
+            href={latestEpisode?.external_urls.spotify ?? 'https://open.spotify.com/show/56jjWvbGxEQiCVoVuc0vGo'}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-black/20 backdrop-blur-md p-4 rounded-2xl border border-white/10 hover:border-white/30 transition-colors block"
+            className="bg-black/20 backdrop-blur-md p-4 rounded-2xl border border-white/10 hover:border-white/30 transition-colors block group"
           >
-            <div className="w-full h-20 bg-black/40 rounded-xl flex items-center px-6 gap-4 border border-white/5">
-              <div className="w-12 h-12 bg-zinc-800 rounded flex items-center justify-center shrink-0">
-                <span className="material-symbols-outlined text-primary">play_arrow</span>
+            <div className="w-full flex items-center px-4 gap-4 py-3 bg-black/30 rounded-xl border border-white/5">
+              {/* Imagen del episodio */}
+              <div className="w-14 h-14 rounded-lg overflow-hidden bg-zinc-800 shrink-0 relative">
+                {episodeImage ? (
+                  <Image
+                    src={episodeImage}
+                    alt={latestEpisode?.name ?? 'Episodio'}
+                    fill
+                    className="object-cover"
+                    sizes="56px"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <span className="material-symbols-outlined text-primary">album</span>
+                  </div>
+                )}
               </div>
+
+              {/* Info */}
               <div className="flex-1 min-w-0">
-                <div className="h-2 w-32 bg-white/20 rounded mb-2" />
-                <div className="h-1.5 w-48 bg-white/10 rounded" />
+                {epNumber && (
+                  <span className="text-[9px] font-black uppercase tracking-widest text-white/50 block mb-0.5">
+                    EP. {epNumber}
+                  </span>
+                )}
+                <p className="text-sm font-bold text-white leading-tight line-clamp-1 group-hover:text-white/80 transition-colors">
+                  {cleanTitle || 'Nunca Fuimos Normales'}
+                </p>
+                {latestEpisode && (
+                  <p className="text-[10px] text-white/50 mt-0.5">
+                    {formatDuration(latestEpisode.duration_ms)}
+                  </p>
+                )}
               </div>
-              <span className="material-symbols-outlined text-white/40 shrink-0">podcasts</span>
+
+              {/* Play */}
+              <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center group-hover:bg-white/20 transition-colors shrink-0">
+                <span className="material-symbols-outlined text-white translate-x-0.5">play_arrow</span>
+              </div>
             </div>
             <p className="text-[10px] text-center mt-3 font-bold uppercase tracking-[0.3em] text-black/50">
-              Escuchando en vivo desde Spotify
+              Escuchar en Spotify
             </p>
           </a>
         </div>

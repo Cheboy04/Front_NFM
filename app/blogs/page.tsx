@@ -4,7 +4,7 @@ import BlogContent from '@/components/blog/BlogContent';
 import BlogSidebar from '@/components/blog/BlogSidebar';
 import { drupal } from '@/lib/drupal';
 import type { DrupalArticle } from '@/lib/types';
-import { getMostRecentPlaylists } from '@/lib/spotify';
+import { getMostRecentPlaylists, getShowEpisodes } from '@/lib/spotify';
 
 export const metadata: Metadata = {
   title: 'Blog | Nunca Fuimos Normales',
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogsPage() {
-  const [articles, categories, playlist] = await Promise.all([
+  const [articles, categories, playlist, episodes] = await Promise.all([
     drupal.getResourceCollection<DrupalArticle[]>('node--article', {
       params: {
         'filter[status]': 1,
@@ -37,6 +37,7 @@ export default async function BlogsPage() {
       next: { revalidate: 3600 },
     }),
     getMostRecentPlaylists(),
+    getShowEpisodes(1),
   ]);
 
   const categoryOptions = [
@@ -59,7 +60,7 @@ export default async function BlogsPage() {
           categories={categoryOptions}
           featuredArticle={featuredArticle}
         />
-        <BlogSidebar playlist={playlist} />
+        <BlogSidebar playlist={playlist} latestEpisode={episodes[0]} />
       </main>
     </>
   );

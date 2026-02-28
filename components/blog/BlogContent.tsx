@@ -64,13 +64,15 @@ export default function BlogContent({ articles, categories, featuredArticle }: B
 
   return (
     <>
-      <FilterBar
-        categories={categories}
-        activeCategory={selectedCategory}
-        onSearch={setSearchQuery}
-        onFilterCategory={setSelectedCategory}
-        onSort={(val) => setSortBy(val as SortOption)}
-      />
+      <div className="col-span-full -mx-6 lg:-mx-20">
+        <FilterBar
+          categories={categories}
+          activeCategory={selectedCategory}
+          onSearch={setSearchQuery}
+          onFilterCategory={setSelectedCategory}
+          onSort={(val) => setSortBy(val as SortOption)}
+        />
+      </div>
 
       <div className="lg:col-span-8 space-y-16">
 
