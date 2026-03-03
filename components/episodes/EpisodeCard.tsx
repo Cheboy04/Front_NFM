@@ -73,7 +73,7 @@ export default function EpisodeCard({ episode, index }: EpisodeCardProps) {
 
         {/* Badge número de episodio */}
         {epNumber && (
-          <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-sm px-2.5 py-1 rounded text-[10px] font-black uppercase tracking-widest text-primary border border-primary/20">
+          <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-sm px-2.5 py-1 rounded text-[14px] font-black uppercase tracking-widest text-primary border border-primary/20">
             EP. {epNumber}
           </div>
         )}
@@ -81,21 +81,21 @@ export default function EpisodeCard({ episode, index }: EpisodeCardProps) {
 
       {/* Contenido */}
       <div className="p-5 flex flex-col flex-1">
-        <h4 className="font-black uppercase tracking-tight text-sm leading-tight mb-3 group-hover:text-primary transition-colors line-clamp-2">
+        <h4 className="font-black uppercase tracking-tight text-base leading-tight mb-3 group-hover:text-primary transition-colors line-clamp-2">
           {cleanTitle}
         </h4>
 
-        <p className="text-gray-500 text-xs leading-relaxed mb-4 flex-1 line-clamp-3">
+        <p className="text-gray-500 text-s leading-relaxed mb-4 flex-1 line-clamp-3">
           {truncate(episode.description, 120)}
         </p>
 
         {/* Meta */}
         <div className="flex items-center justify-between pt-3 border-t border-white/5">
-          <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-500">
+          <div className="flex items-center gap-1.5 text-[13px] font-bold uppercase tracking-widest text-gray-500">
             <span className="material-symbols-outlined text-primary text-sm">schedule</span>
             {formatDuration(episode.duration_ms)}
           </div>
-          <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-500">
+          <div className="flex items-center gap-1.5 text-[13px] font-bold uppercase tracking-widest text-gray-500">
             <span className="material-symbols-outlined text-primary text-sm">calendar_today</span>
             {formatDate(episode.release_date)}
           </div>

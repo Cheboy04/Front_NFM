@@ -255,22 +255,6 @@ export default function ContactPage({ latestEpisode}: ContactPageProps) {
                 ))}
               </div>
             </div>
-
-            {/* Press kit */}
-            <div className="bg-primary/5 p-6 rounded-xl border border-primary/20 relative overflow-hidden group">
-              <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500 pointer-events-none">
-                <span className="material-symbols-outlined text-8xl">newspaper</span>
-              </div>
-              <h4 className="text-sm font-black uppercase tracking-widest mb-2">
-                Sección de Prensa
-              </h4>
-              <p className="text-xs text-gray-400 mb-6 leading-relaxed">
-                Descarga nuestro kit oficial: logos, fotos en alta resolución y biografía del equipo.
-              </p>
-              <button className="w-full py-3 border-2 border-primary text-primary text-[10px] font-black uppercase tracking-[0.3em] rounded hover:bg-primary hover:text-white transition-all">
-                DESCARGAR KIT
-              </button>
-            </div>
           </div>
         </div>
       </main>
@@ -286,7 +270,7 @@ export default function ContactPage({ latestEpisode}: ContactPageProps) {
           <div>
             <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tighter italic mb-4 leading-none">
               MIENTRAS ESPERÁS <br />
-              <span className="text-black/30">NUESTRA RESPUESTA...</span>
+              <span className="text-black/50">NUESTRA RESPUESTA...</span>
             </h3>
             <p className="text-white/80 font-medium max-w-md uppercase tracking-widest text-xs">
               Dale play al último episodio y sumergete en el lado B del rock.
@@ -298,9 +282,9 @@ export default function ContactPage({ latestEpisode}: ContactPageProps) {
             href={latestEpisode?.external_urls.spotify ?? 'https://open.spotify.com/show/56jjWvbGxEQiCVoVuc0vGo'}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-black/20 backdrop-blur-md p-4 rounded-2xl border border-white/10 hover:border-white/30 transition-colors block group"
+            className="bg-black/55 backdrop-blur-md p-4 rounded-2xl border border-white/10 hover:border-white/30 transition-colors block group"
           >
-            <div className="w-full flex items-center px-4 gap-4 py-3 bg-black/30 rounded-xl border border-white/5">
+            <div className="w-full flex items-center px-4 gap-4 py-3 rounded-xl ">
               {/* Imagen del episodio */}
               <div className="w-14 h-14 rounded-lg overflow-hidden bg-zinc-800 shrink-0 relative">
                 {episodeImage ? (
@@ -321,15 +305,15 @@ export default function ContactPage({ latestEpisode}: ContactPageProps) {
               {/* Info */}
               <div className="flex-1 min-w-0">
                 {epNumber && (
-                  <span className="text-[9px] font-black uppercase tracking-widest text-white/50 block mb-0.5">
+                  <span className="text-[15px] font-black uppercase tracking-widest text-white/50 block mb-0.5">
                     EP. {epNumber}
                   </span>
                 )}
-                <p className="text-sm font-bold text-white leading-tight line-clamp-1 group-hover:text-white/80 transition-colors">
+                <p className="text-md font-bold text-white leading-tight line-clamp-1 group-hover:text-white/80 transition-colors">
                   {cleanTitle || 'Nunca Fuimos Normales'}
                 </p>
                 {latestEpisode && (
-                  <p className="text-[10px] text-white/50 mt-0.5">
+                  <p className="text-[13px] text-white/50 mt-0.5">
                     {formatDuration(latestEpisode.duration_ms)}
                   </p>
                 )}
@@ -340,7 +324,7 @@ export default function ContactPage({ latestEpisode}: ContactPageProps) {
                 <span className="material-symbols-outlined text-white translate-x-0.5">play_arrow</span>
               </div>
             </div>
-            <p className="text-[10px] text-center mt-3 font-bold uppercase tracking-[0.3em] text-black/50">
+            <p className="text-[15px] text-center mt-3 font-bold uppercase tracking-[0.3em] text-white">
               Escuchar en Spotify
             </p>
           </a>

@@ -9,19 +9,19 @@ const SOUNDWAVE_DELAYS = [0.1, 0.3, 0.2, 0.4, 0.1, 0.5, 0.2, 0.3];
 
 const WHAT_WE_DO = [
   {
-    icon: 'search_insights', /* Cambiar por iconos */
+    icon: 'search_insights',
     title: 'Investigación Profunda',
     description:
       'Excavamos en archivos analógicos, cintas perdidas y testimonios olvidados para desenterrar la verdad sobre los discos más icónicos.',
   },
   {
-    icon: 'mic_external_on', /* Cambiar por iconos */
+    icon: 'mic_external_on',
     title: 'Conversaciones Crudas',
     description:
       'Sin guiones preestablecidos. Hablamos con leyendas y técnicos sobre lo que realmente pasó en el estudio cuando nadie estaba grabando.',
   },
   {
-    icon: 'auto_stories', /* Cambiar por iconos */
+    icon: 'auto_stories', 
     title: 'Historias Épicas',
     description:
       'Nuestra narrativa te transporta a las giras caóticas de los 70 y la angustia grunge de los 90 como si estuvieras allí mismo.',
@@ -48,7 +48,6 @@ export default function AboutPage() {
       <section className="relative h-[80vh] flex items-center justify-center overflow-hidden bg-zinc-900">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-background-dark z-10" />
-          {/* Imagen de fondo — reemplaza con tu imagen real */}
           <Image
                 src={heroImage}
                 alt="Recording studio console and microphones"
@@ -64,7 +63,7 @@ export default function AboutPage() {
             NUNCA FUIMOS <span className="text-primary">NORMALES</span>
           </h2>
           <p className="text-primary italic font-medium tracking-[0.3em] uppercase mb-6 text-sm">
-            El Lado B del Disco
+            Y QUÉ BUENO QUE NO
           </p>
 
           {/* Soundwave animada */}
@@ -101,22 +100,65 @@ export default function AboutPage() {
             </h3>
             <div className="space-y-6 text-gray-400 text-lg leading-relaxed">
               <p>
-                Todo comenzó en una habitación llena de vinilos y una pregunta:{' '}
-                <span className="text-white font-bold">
-                  "¿Qué pasó realmente cuando se apagaron las luces del escenario?"
-                </span>{' '}
-                Hartos de las biografías edulcoradas y los documentales oficiales, decidimos cavar más profundo.
+                Todo empezó un domingo.
+                Un tío y su sobrino.
+                Una conversación larga.
+                Un par de riffs sonando de fondo.
+                Y una pregunta que lo cambió todo:
               </p>
               <p>
-                "Nunca Fuimos Normales" no es solo un podcast sobre música. Es una exploración de la psique del rock and
-                roll. Investigamos los archivos que las disqueras quisieron quemar y hablamos con quienes estuvieron
-                allí, en las sombras del backstage.
+                ¿Por qué guardarnos todo este conocimiento? <br />
+                ¿Por qué no convertirlo en algo más grande?
               </p>
               <p>
-                Nuestra misión es simple: preservar el peligro, la crudeza y la genialidad que hicieron que el rock
-                cambiara el mundo entre los 70s y los 90s. Porque la verdadera historia siempre es más fascinante que la
-                leyenda.
+                Ese domingo, Boris y Julián entendieron que el rock no era solo música. Era memoria. <br />Era identidad. <br />Era cultura viva. <br />
+
+                Hablaron de discos que marcaron generaciones. De conciertos que parecían rituales. De bandas que rompieron moldes y de canciones que salvaron días difíciles. <br />
               </p>
+              <p>
+                Y decidieron que esas historias no podían quedarse en la sala. <br />
+
+                Tenían que salir. <br />
+
+                Tenían que sonar. <br />
+              </p>
+              <p>
+                Así nació Nunca Fuimos Normales. <br />
+              </p>
+              <p>
+                No como un proyecto comercial. <br />
+                No como un programa más. <br />
+                Sino como un acto de transmisión.
+              </p>
+              <p>
+                Un espacio donde el rock no se analiza desde la distancia, sino desde la experiencia. <br />
+
+                Donde no hablamos de rankings.
+                Hablamos de impacto.
+                Hablamos de lo que pasa cuando una canción se convierte en parte de tu vida. <br />
+              </p>
+              <p>
+                Tiempo después se unió Juani.
+                Y la conversación creció.
+                Se volvió más profunda.
+                Más diversa.
+                Más intensa.
+              </p>
+              <p>           
+                Hoy, Nunca Fuimos Normales es un podcast de rock en español dedicado a explorar la historia del rock, las bandas icónicas, los discos que redefinieron generaciones y las historias que quedaron fuera del documental oficial.
+
+                Somos cronistas del backstage. <br />
+                Narradores de la mitología del rock.
+                Inadaptados con micrófono.
+
+                Porque nunca nacimos para flotar.
+                Nacimos para agitar.
+
+                Y si tú estás aquí, probablemente tampoco fuiste normal.
+
+                Bienvenido.
+              </p>
+             
             </div>
           </div>
 

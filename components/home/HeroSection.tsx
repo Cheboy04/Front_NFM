@@ -21,16 +21,18 @@ export default function HeroSection() {
       {/* Content */}
       <div className="relative z-20 max-w-7xl mx-auto px-6 lg:px-20 w-full -translate-y-20">
         <div className="max-w-2xl">
-          <span className="inline-block bg-primary px-3 py-1 text-[10px] font-black tracking-[0.2em] uppercase mb-6">
+          <span className="inline-block bg-primary px-3 py-1 text-[12px] font-black tracking-[0.2em] uppercase mb-6">
             Nuevo Episodio
           </span>
-          <h2 className="text-6xl md:text-8xl font-black leading-[0.9] tracking-tighter uppercase mb-6 italic">
+          <h2 className="text-6xl md:text-6xl font-black leading-[0.9] tracking-tighter uppercase mb-6 italic">
             EL LADO B <br />
-            <span className="text-white/40">DEL DISCO</span>
+            <span className="text-white/40">DEL DISCO</span> <br />
+            Podcast de Rock <br />en Español
           </h2>
           <p className="text-lg md:text-xl font-medium text-gray-300 mb-10 max-w-lg leading-relaxed">
-            Historias no contadas del rock que marcó generaciones. Desde los excesos en el backstage
-            hasta los mitos urbanos de los 70s y 90s.
+            Nunca Fuimos Normales es un podcast de rock en español dedicado a explorar la historia del rock, las bandas que cambiaron generaciones y los discos que definieron culturas.
+             Desde los excesos en el backstage
+            hasta los mitos urbanos del rock.
           </p>
           <div className="flex flex-wrap gap-4">
             <button className="flex items-center gap-3 bg-primary px-8 py-4 rounded-lg font-bold uppercase tracking-widest hover:bg-primary/90 transition-all group">
@@ -40,8 +42,8 @@ export default function HeroSection() {
               ESCUCHAR ÚLTIMO EPISODIO
             </button>
             <button className="flex items-center gap-3 bg-white/10 backdrop-blur-md px-8 py-4 rounded-lg font-bold uppercase tracking-widest hover:bg-white/20 transition-all border border-white/20">
-              VER TRACKLIST
-            </button>
+              VER BLOGS
+            </button> {/* Redireccionar a blogs */}
           </div>
         </div>
       </div>
