@@ -1,17 +1,15 @@
+import { cache } from "react";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
-import { Article } from "@/components/drupal/Article";
-import { drupal } from "@/lib/drupal";
 import type { Metadata } from "next";
+import { drupal } from "@/lib/drupal";
+import { Article } from "@/components/drupal/Article";
 import type { DrupalArticle } from "@/lib/types";
 
-type NodePageParams = { slug: string[] };
-type NodePageProps = {
-  params: Promise<NodePageParams>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-};
+type Params = { slug: string[] };
+type Props = { params: Promise<Params> };
 
-async function getArticleByAlias(aliasPath: string): Promise<DrupalArticle | null> {
+const getArticleByAlias = cache(async (aliasPath: string): Promise<DrupalArticle | null> => {
   try {
     const articles = await drupal.getResourceCollection<DrupalArticle[]>("node--article", {
       params: {
@@ -19,25 +17,39 @@ async function getArticleByAlias(aliasPath: string): Promise<DrupalArticle | nul
         "filter[path][value]": aliasPath,
         include: "field_image,uid,field_category,field_tags",
         "page[limit]": 1,
-        sort: "-created",
       },
       next: { revalidate: 3600 },
     });
-
     return articles?.[0] ?? null;
   } catch {
     return null;
   }
-}
+});
+
+const getRelatedArticles = cache(async (excludeId: string): Promise<DrupalArticle[]> => {
+  try {
+    return await drupal.getResourceCollection<DrupalArticle[]>("node--article", {
+      params: {
+        "filter[status]": 1,
+        "filter[id][operator]": "<>",
+        "filter[id][value]": excludeId,
+        include: "field_image,field_category",
+        sort: "-created",
+        "page[limit]": 3,
+      },
+      next: { revalidate: 3600 },
+    });
+  } catch {
+    return [];
+  }
+});
 
 export const dynamicParams = true;
 
-// Si Drupal se cae en build, no rompas el deploy
-export async function generateStaticParams(): Promise<NodePageParams[]> {
+// Mantén tu build estable si Drupal falla en build
+export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
   try {
     const resources = await drupal.getResourceCollectionPathSegments(["node--article"], {});
-    // resources trae segments, normalmente ["blog","mi-slug"]
-    // Aquí devolvemos solo lo que va dentro de /blog/ (o sea, sin el prefijo "blog")
     return resources
       .filter((r) => r.segments?.[0] === "blog")
       .map((r) => ({ slug: r.segments.slice(1) }));
@@ -47,7 +59,7 @@ export async function generateStaticParams(): Promise<NodePageParams[]> {
   }
 }
 
-export async function generateMetadata(props: NodePageProps): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
   const { slug } = await props.params;
   const aliasPath = `/blog/${slug.join("/")}`;
 
@@ -70,7 +82,7 @@ export async function generateMetadata(props: NodePageProps): Promise<Metadata> 
   };
 }
 
-export default async function BlogArticlePage(props: NodePageProps) {
+export default async function BlogArticlePage(props: Props) {
   const { slug } = await props.params;
   const draft = await draftMode();
   const isDraftMode = draft.isEnabled;
@@ -81,22 +93,7 @@ export default async function BlogArticlePage(props: NodePageProps) {
   if (!article) notFound();
   if (!isDraftMode && (article as any)?.status === false) notFound();
 
-  // Relacionados (fallback silencioso)
-  let relatedArticles: DrupalArticle[] = [];
-  try {
-    const related = await drupal.getResourceCollection<DrupalArticle[]>("node--article", {
-      params: {
-        "filter[status]": 1,
-        "filter[id][operator]": "<>",
-        "filter[id][value]": article.id,
-        include: "field_image,field_category",
-        sort: "-created",
-        "page[limit]": 3,
-      },
-      next: { revalidate: 3600 },
-    });
-    relatedArticles = related;
-  } catch {}
+  const relatedArticles = await getRelatedArticles(article.id);
 
   return <Article node={article} relatedArticles={relatedArticles} />;
 }
