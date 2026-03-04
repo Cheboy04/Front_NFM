@@ -16,7 +16,7 @@ export default function BlogCard({ article }: BlogCardProps) {
   const imageAlt = article.field_image?.resourceIdObjMeta?.alt || article.title;
 
   // Get article path
-  const articlePath = article.path?.alias || `/node/${article.drupal_internal__nid}`;
+  const articlePath = article.path?.alias ?? `/node/${article.drupal_internal__nid}`;
 
   return (
     <article className="group">
