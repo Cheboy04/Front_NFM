@@ -85,11 +85,14 @@ export async function generateMetadata(
 
 const RESOURCE_TYPES = ["node--page", "node--article"]
 
+export const dynamicParams = true
+
 export async function generateStaticParams(): Promise<NodePageParams[]> {
   try{
     const resources = await drupal.getResourceCollectionPathSegments(RESOURCE_TYPES, {})
     return resources.map((resource) => ({ slug: resource.segments }))
-  } catch (e) {
+  } catch (error) {
+    console.warn("Drupal unreachable during build. Skipping static generation.")
     return []
   }
 }

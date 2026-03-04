@@ -1,8 +1,7 @@
 import { DraftAlert } from "@/components/misc/DraftAlert"
 import type { Metadata } from "next"
 import type { ReactNode } from "react"
-import { Space_Grotesk, Lora } from 'next/font/google';
-import Head from 'next/head';
+import { Space_Grotesk, Lora } from "next/font/google";
 import "@/styles/globals.css"
 import Navbar from "@/components/layout/Navbar"
 import Footer from "@/components/layout/Footer"
@@ -13,6 +12,7 @@ const spaceGrotesk = Space_Grotesk({
   variable: '--font-space-grotesk',
   display: 'swap',
 });
+
 const lora = Lora({
   subsets: ['latin'],
   weight: ['400', '500', '600'],
@@ -68,13 +68,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className="dark">
-      <head>
-        {/* Google Material Symbols */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-          rel="stylesheet"
-        />
-      </head>
       <body className={`${spaceGrotesk.variable} ${lora.variable} font-display antialiased min-h-screen flex flex-col`}>
         <DraftAlert />
         <div className="flex-1">
