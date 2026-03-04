@@ -6,6 +6,9 @@ import { drupal } from '@/lib/drupal';
 import type { DrupalArticle } from '@/lib/types';
 import { getMostRecentPlaylists, getShowEpisodes } from '@/lib/spotify';
 
+
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: 'Blog | Nunca Fuimos Normales',
   description: 'Crónicas, mitos y realidades del rock. Lee las historias no contadas de las leyendas que marcaron la música.',
@@ -19,29 +22,57 @@ export const metadata: Metadata = {
 
 export default async function BlogsPage() {
   const [articles, categories, playlist, episodes] = await Promise.all([
-    drupal.getResourceCollection<DrupalArticle[]>('node--article', {
-      params: {
-        'filter[status]': 1,
-        'include': 'field_image,field_category',
-        'sort': '-created',
-        'page[limit]': 12,
-      },
-      next: { revalidate: 3600 },
-    }),
-    drupal.getResourceCollection('taxonomy_term--categorias', {
-      params: {
-        'filter[status]': 1,
-        'fields[taxonomy_term--categorias]': 'name,drupal_internal__tid',
-        'sort': 'name',
-      },
-      next: { revalidate: 3600 },
-    }),
-    getMostRecentPlaylists(),
-    getShowEpisodes(1),
+    (async () => {
+      try {
+        return await drupal.getResourceCollection<DrupalArticle[]>("node--article", {
+          params: {
+            "filter[status]": 1,
+            include: "field_image,field_category",
+            sort: "-created",
+            "page[limit]": 12,
+          },
+          next: { revalidate: 3600 },
+        });
+      } catch (e) {
+        // No rompemos el build si Drupal falla en build/preview
+        return [] as DrupalArticle[];
+      }
+    })(),
+
+    (async () => {
+      try {
+        return await drupal.getResourceCollection<any[]>("taxonomy_term--categorias", {
+          params: {
+            "filter[status]": 1,
+            "fields[taxonomy_term--categorias]": "name,drupal_internal__tid",
+            sort: "name",
+          },
+          next: { revalidate: 3600 },
+        });
+      } catch (e) {
+        return [] as any[];
+      }
+    })(),
+
+    (async () => {
+      try {
+        return await getMostRecentPlaylists();
+      } catch (e) {
+        return null as any; // o [] según tu componente
+      }
+    })(),
+
+    (async () => {
+      try {
+        return await getShowEpisodes(1);
+      } catch (e) {
+        return [] as any[];
+      }
+    })(),
   ]);
 
   const categoryOptions = [
-    { id: 'all', name: 'Todos' },
+    { id: "all", name: "Todos" },
     ...categories.map((cat: any) => ({
       id: String(cat.drupal_internal__tid),
       name: cat.name,
