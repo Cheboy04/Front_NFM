@@ -86,8 +86,12 @@ export async function generateMetadata(
 const RESOURCE_TYPES = ["node--page", "node--article"]
 
 export async function generateStaticParams(): Promise<NodePageParams[]> {
-  const resources = await drupal.getResourceCollectionPathSegments(RESOURCE_TYPES, {})
-  return resources.map((resource) => ({ slug: resource.segments }))
+  try{
+    const resources = await drupal.getResourceCollectionPathSegments(RESOURCE_TYPES, {})
+    return resources.map((resource) => ({ slug: resource.segments }))
+  } catch (e) {
+    return []
+  }
 }
 
 export default async function NodePage(props: NodePageProps) {

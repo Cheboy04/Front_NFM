@@ -6,6 +6,11 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
+        protocol: "https",
+        hostname: "nfm-api.byethost32.com",
+        pathname: "/drupal/web/sites/default/files/**",
+      },
+      {
         protocol: 'http',
         hostname: 'localhost',
         port: '8085',
