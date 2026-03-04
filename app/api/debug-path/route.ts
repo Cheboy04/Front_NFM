@@ -3,25 +3,22 @@ import { drupal } from "@/lib/drupal";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const path = searchParams.get("path") || "/blog/nuevo-articulo-desde-drupal";
+  const alias = searchParams.get("alias") || "/blog/nuevo-articulo-desde-drupal";
+
+  const url = `${process.env.NEXT_PUBLIC_DRUPAL_BASE_URL}/jsonapi/node/article?filter[path][alias]=${encodeURIComponent(alias)}&page[limit]=1`;
 
   try {
-    const translated = await drupal.translatePath(path);
+    const res = await fetch(url, { cache: "no-store" });
+    const text = await res.text();
+
     return NextResponse.json({
-      ok: true,
-      baseUrl: process.env.NEXT_PUBLIC_DRUPAL_BASE_URL,
-      path,
-      translated,
+      ok: res.ok,
+      status: res.status,
+      contentType: res.headers.get("content-type"),
+      url,
+      bodyStarts: text.slice(0, 200),
     });
   } catch (e: any) {
-    return NextResponse.json(
-      {
-        ok: false,
-        baseUrl: process.env.NEXT_PUBLIC_DRUPAL_BASE_URL,
-        path,
-        error: e?.message || String(e),
-      },
-      { status: 500 }
-    );
+    return NextResponse.json({ ok: false, error: e?.message || String(e), url }, { status: 500 });
   }
 }

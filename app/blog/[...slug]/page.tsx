@@ -11,15 +11,32 @@ type Props = { params: Promise<Params> };
 
 const getArticleByAlias = cache(async (aliasPath: string): Promise<DrupalArticle | null> => {
   try {
+    // 1) resolver alias -> /node/{nid}
+    const aliases = await drupal.getResourceCollection<any[]>("path_alias--path_alias", {
+      params: {
+        "filter[alias]": aliasPath,
+        "page[limit]": 1,
+      },
+      next: { revalidate: 3600 },
+    });
+
+    const resolvedPath: string | undefined = aliases?.[0]?.path; // ej "/node/1"
+    const match = resolvedPath?.match(/^\/node\/(\d+)$/);
+    if (!match) return null;
+
+    const nid = match[1];
+
+    // 2) pedir el artículo por nid
     const articles = await drupal.getResourceCollection<DrupalArticle[]>("node--article", {
       params: {
         "filter[status]": 1,
-        "filter[path][value]": aliasPath,
+        "filter[drupal_internal__nid]": nid,
         include: "field_image,uid,field_category,field_tags",
         "page[limit]": 1,
       },
       next: { revalidate: 3600 },
     });
+
     return articles?.[0] ?? null;
   } catch {
     return null;
