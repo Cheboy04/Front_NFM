@@ -29,6 +29,10 @@ export const metadata: Metadata = {
   },
   description:
     'El podcast definitivo sobre la cultura, los excesos y la genialidad del rock and roll. Historias no contadas de las bandas que marcaron la historia.',
+  icons: [],
+  other: {
+    'google-fonts': 'Material Symbols Outlined'
+  },
   keywords: [
     'rock',
     'podcast',
