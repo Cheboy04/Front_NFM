@@ -10,6 +10,8 @@ import AboutSection from '@/components/home/AboutSection';
 import BlogCard from "@/components/blog/BlogCard"
 import EpisodeCard from '@/components/episodes/EpisodeCard';
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: 'Nunca Fuimos Normales | El Lado B del Disco',
   description:
@@ -31,21 +33,29 @@ export const metadata: Metadata = {
 
 export default async function Home() {
    const [episodes, articles] = await Promise.all([
-      getShowEpisodes(3), await drupal.getResourceCollection<DrupalNode[]>(
-      "node--article",
-      {
-        params: {
-          "filter[status]": 1,
-          "include": "field_image,field_category",
-          "sort": "-created",
-          "page[limit]": 3,
-        },
-        next: {
-          revalidate: 3600,
-        },
+    (async () => {
+      try {
+        return await getShowEpisodes(3);
+      } catch {
+        return [];
       }
-    )
-   ]) 
+    })(),
+    (async () => {
+      try {
+        return await drupal.getResourceCollection<DrupalNode[]>("node--article", {
+          params: {
+            "filter[status]": 1,
+            include: "field_image,field_category",
+            sort: "-created",
+            "page[limit]": 3,
+          },
+          next: { revalidate: 3600 },
+        });
+      } catch {
+        return [];
+      }
+    })(),
+  ]);
 
   return (
     <>
