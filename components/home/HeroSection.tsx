@@ -19,17 +19,17 @@ export default function HeroSection() {
       </div>
 
       {/* Content */}
-      <div className="relative z-20 max-w-7xl mx-auto px-6 lg:px-20 w-full -translate-y-20">
+      <div className="relative z-20 max-w-7xl mx-auto px-6 lg:px-20 w-full -translate-y-10 md:-translate-y-20">
         <div className="max-w-2xl">
           <span className="inline-block bg-primary px-3 py-1 text-[12px] font-black tracking-[0.2em] uppercase mb-6">
             Nuevo Episodio
           </span>
-          <h2 className="text-6xl md:text-6xl font-black leading-[0.9] tracking-tighter uppercase mb-6 italic">
+          <h2 className="text-3xl sm:text-4xl md:text-6xl font-black leading-[0.9] tracking-tighter uppercase mb-6 italic">
             EL LADO B <br />
             <span className="text-white/40">DEL DISCO</span> <br />
             Podcast de Rock <br />en Español
           </h2>
-          <p className="text-lg md:text-xl font-medium text-gray-300 mb-10 max-w-lg leading-relaxed">
+          <p className="text-md md:text-xl font-medium text-gray-300 mb-10 max-w-lg leading-relaxed">
             Nunca Fuimos Normales es un podcast de rock en español dedicado a explorar la historia del rock, las bandas que cambiaron generaciones y los discos que definieron culturas.
              Desde los excesos en el backstage
             hasta los mitos urbanos del rock.

@@ -134,7 +134,7 @@ export default function BlogContent({ articles, categories, featuredArticle }: B
           <div className="text-center py-20 space-y-4">
             <span className="material-symbols-outlined text-white/10 text-8xl block">search_off</span>
             <p className="text-gray-500 text-lg">No hay historias con esos filtros.</p>
-            <p className="text-gray-600 text-sm">Probá con otra búsqueda o categoría.</p>
+            <p className="text-gray-600 text-sm">Prueba con otra búsqueda o categoría.</p>
           </div>
         )}
 
